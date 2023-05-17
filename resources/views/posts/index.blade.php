@@ -7,16 +7,24 @@
         @foreach ($posts as $post)
         <div class="col">
             <div class="card">
-                <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="Post Image" width="200px"  height="250px">
+                <a href="{{ route('posts.show', $post->id) }}">
+                    <div class="card h-100">
+                        <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px" height="300px">
+                    
+                    </div>
+                </a>
+                {{-- <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="Post Image" width="200px"  height="250px"> --}}
                 <div class="card-body center">
                     <p class="card-text">{{ $post->description }}</p>
-                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary"><i class="material-icons">comment</i></a>
+                    {{-- <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary"><i class="material-icons">comment</i></a> --}}
+                    <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="btn btn-primary"><i class="material-icons">comment</i></a>
+
                     @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->id == $post->user_id))
 
-                    <a href="{{ route('editPost', $post->id) }}" class="btn btn-warning"><i class="material-icons">edit</i></a>
+                    <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning"><i class="material-icons">edit</i></a>
                     {{-- <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-primary">{{ __('Edit') }}</a> --}}
 
-                    {{-- <form method="POST" action="{{ route('posts.destroy', $post->id) }}" class="d-inline-block">
+                    {{-- <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}" class="d-inline-block">
                         @csrf
                         @method('DELETE') --}}
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal"><i class="material-icons">delete</i></button>
@@ -47,14 +55,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                @if(isset($post))
-                {{-- {{ dd($post) }} --}}
-                <form method="POST" action="{{ route('posts.destroy', ['post' => $post->id]) }}">
+               @if (isset($post) && $post->id)
+                <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}">
                     @csrf
                     @method('DELETE')
+                    <input type="hidden" name="id" value="{{ $post->id }}">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
-                @endif            
+            @endif     
             </div>
         </div>
     </div>

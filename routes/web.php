@@ -51,15 +51,19 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/createPost', [PostController::class, 'create'])->name('createPost');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::get('/editpost/{id}', [PostController::class, 'edit'])->name('editPost');
-    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    // Route::get('/editpost/{id}', [PostController::class, 'edit'])->name('editPost');
+    Route::get('/posts/{id}/edit', 'App\Http\Controllers\PostController@edit')->name('editPost');
 
+    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+    
+    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    Route::get('/myprofile', [MyProfileController::class, 'index'])->name('myprofile');
 
+    Route::get('/myprofile', [MyProfileController::class, 'index'])->name('myprofile');
     Route::get('/myprofile/edit', [MyProfileController::class, 'edit'])->name('myprofile.edit');
     Route::put('/myprofile', [MyProfileController::class, 'update'])->name('myprofile.update');
 
@@ -68,10 +72,33 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{username}', [UserController::class, 'showProfile'])->name('user.profile');
     Route::post('/users/{user}/follow', [UserController::class, 'followUser'])->name('followUser');
 
+    Route::get('/users', [UserController::class, 'index'])->name('users.index'); 
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit'); 
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::put('/users/{user}', [UserController::class, 'updateUser'])->name('users.update');
     
+
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
+
+
 });
+
+    /** 
+     * RUTAS ADMIN:
+     */
+    // Route::group(['middleware' => ['admin']], function() {
+
+        
+    // Route::get('/admin/users', 'UserController@index')->name('admin.users.index');
+    // Route::resource('users', UsersController::class);
+
+    // Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
+      
+
+    // });
 
 
 Auth::routes();

@@ -9,14 +9,17 @@
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>PETGRAM</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+  <!-- Agrega el enlace al archivo JS de jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Agrega el enlace al archivo JS de DataTables -->
+  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -69,6 +72,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('myprofile') }}">{{ __('My Profile') }}</a>
                         </li>
+
+                        @if(Auth::user()->isAdmin())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
+                        </li>
+                    @endif
                         <li class="nav-item">
                             <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
@@ -90,6 +99,8 @@
                             </li>
 
                         @endauth
+                      
+
                     </ul>
                 </div>
             </div>
@@ -118,6 +129,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-/+M3oq8wvZnZZQyNH7oQ2sNVfy8vruy1p0d+TJpggrxW8qPGt/b0krCgYic7J2mW" crossorigin="anonymous"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
+    @push('scripts')
     
+<link href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+<script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+<script src="//cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+@endpush
+
 </body>
 </html>

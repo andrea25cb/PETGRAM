@@ -28,9 +28,7 @@
                     <a href="{{ route('posts.show', $post->id) }}">
                         <div class="card h-100">
                             <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px" height="300px">
-                            {{-- <div class="card-body">
-                                <p class="card-text fs-5">{{ $post->description }}</p>
-                            </div> --}}
+                        
                         </div>
                     </a>
                     

@@ -3,9 +3,16 @@
 @section('content')
 <div class="container">
     <div class="card w-50">
-        <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="Post Image" width="50%" height="50%">
+        
+        @if (empty($post->photo))
+        <p>No image found</p>
+        @else
+            <img src="{{ asset('images/'.$post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px" height="300px">
+        @endif
+    
+        {{-- <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="Post Image" width="50%" height="50%">
         <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px" height="300px">
-        <div class="card-body">
+       --}} <div class="card-body"> 
             <h5 class="card-title">{{ $post->description }}</h5>
             {{-- <p class="card-text">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p> --}}
             <hr>
@@ -35,7 +42,10 @@
             @if (optional(Auth::user())->isAdmin() || (Auth::user() && Auth::user()->id == $post->user_id))
             <hr>
             <div class="d-flex justify-content-between">
-                <a href="{{ route('editPost', ['post' => $post->id]) }}" class="btn btn-warning">Edit</a>
+                @if (isset($post->id))
+                <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning">Edit</a>
+            @endif
+            
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Delete</button>
             </div>
             @endif
@@ -56,14 +66,15 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                @if(isset($post))
-                {{-- {{ dd($post) }} --}}
-                <form method="POST" action="{{ route('posts.destroy', ['post' => $post->id]) }}">
+                @if (isset($post) && $post->id)
+                <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}">
                     @csrf
                     @method('DELETE')
+                    <input type="hidden" name="id" value="{{ $post->id }}">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
-                @endif            
+            @endif
+            
             </div>
         </div>
     </div>

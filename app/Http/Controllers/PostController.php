@@ -12,7 +12,7 @@ class PostController extends Controller
     public function index()
     {
         if (Auth::user()->isAdmin()) {
-            $posts = Post::paginate(5);
+            $posts = Post::paginate(8);
         } else {
             $userIds = Auth::user()->followings()->pluck('users.id')->toArray();
             array_push($userIds, Auth::id());
@@ -50,24 +50,20 @@ class PostController extends Controller
     {
         return view('posts.show', compact('post'));
     }
-    
 
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
         $currentPhoto = $post->photo;
-    return view('posts.edit', compact('post', 'currentPhoto'));
-     
+        return view('posts.edit', compact('post', 'currentPhoto')); 
     }
-
-    public function update(Request $request, $id)
+    
+    public function update(Request $request, Post $post)
     {
         $request->validate([
             'photo' => 'image|max:2048',
             'description' => 'required',
         ]);
     
-        $post = Post::findOrFail($id);
         $post->description = $request->description;
     
         if ($request->hasFile('photo')) {
@@ -85,8 +81,8 @@ class PostController extends Controller
     
         return redirect()->route('posts')->with('success', 'Post updated successfully.');
     }
+      
     
-
     public function destroy(Post $post)
     {
         if (Auth::user()->isAdmin() || Auth::id() == $post->user_id) {
