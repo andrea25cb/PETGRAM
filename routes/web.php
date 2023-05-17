@@ -78,7 +78,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{user}', [UserController::class, 'updateUser'])->name('users.update');
     
+    use App\Http\Controllers\FollowController;
 
+    // Ruta para seguir a un usuario
+    Route::post('/follow/{user}', [FollowController::class, 'followUser'])
+        ->name('followUser')
+        ->middleware('auth');
+
+    // Ruta para dejar de seguir a un usuario
+    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])
+        ->name('unfollowUser')
+        ->middleware('auth');
+
+    
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 
