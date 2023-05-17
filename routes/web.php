@@ -81,14 +81,12 @@ Route::middleware(['auth'])->group(function () {
     use App\Http\Controllers\FollowController;
 
     // Ruta para seguir a un usuario
-    Route::post('/follow/{user}', [FollowController::class, 'followUser'])
-        ->name('followUser')
-        ->middleware('auth');
+    Route::post('/follow/{user}', [FollowController::class, 'followUser'])->name('followUser')
+   
 
     // Ruta para dejar de seguir a un usuario
-    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])
-        ->name('unfollowUser')
-        ->middleware('auth');
+    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser')
+        
 
     
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
