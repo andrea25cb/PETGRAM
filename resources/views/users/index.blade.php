@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+<div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('users.create') }}" class="btn btn-primary">ADD NEW USER</a>
+    </div>
     <h1>Users</h1>
 
     <table class="table" id="users-table">
