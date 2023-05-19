@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -28,35 +30,44 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    /**
-    * Metodo para guardar el formulario de creacion de un nuevo user. Luego se encarga de guardar la instancia de Titulo en la base de datos.
-    * 
-    * @param $request
-    * 
-    * @return Si el usuario se llama a guardar el proceso exitosa retorna un route'users '
-    */
-    public function store(User $request)
+    public function store(Request $request)
     {
-        // $request->file('fichero')->store('public');
-       // Metodo para fichero de fichero de fichero de fichero de fichero
-       if( $request->file('fichero')){
-            $request->file('fichero')->move('storage');
-       }
-   
-        $v = $request->validated();
-        Log::debug('peticion:'.print_r($v,true));
-       // dd($v);
-        $t=user::create($v);
-        Log::debug('peticion:'.print_r($t,true));;
-        $t->users_id=$request->users_id;
-        $t->fechaC=$request->fechaC;
-        $t->fechaR=$request->fechaR;
-        $t->save();
-        session()->flash('status','user created!');
-
-        return redirect()->route('users.index');
-
+        // Validate input data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'bio' => 'nullable|string|max:500',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+    
+        // Create user
+        $user = new User;
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->bio = $request->bio;
+    
+        // Check if profile image was uploaded
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('public/profile_images', $filename);
+            $user->profile_image = $filename;
+        }
+    
+        $user->save();
+    
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
+    
+    
 
     /**
     * Devuelve la vista del usuario en formato html. Si el nuevo user tiene que hay algun asignado se encuentra el archivo de fichero y enlace la url correspondiente
@@ -69,7 +80,6 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
     
-
     /**
     * Show the form for editing the specified resource. GET / users / { id } / edit. php
     * 
@@ -138,7 +148,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        // $user = User::withTrashed()->get();
+        $user = User::withTrashed()->get();
         return redirect()->route('users.index')->with('delete', 'ok');
     }
 

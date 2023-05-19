@@ -18,9 +18,15 @@ class PostController extends Controller
             array_push($userIds, Auth::id());
             $posts = Post::whereIn('user_id', $userIds)->paginate(5);
         }
-
-        return view('posts.index', compact('posts'));
+    
+        // $username = User::select('username')->where('id','=', 1)->get()
+      
+    
+        return view('posts.index', compact('posts', 'users'));
     }
+    
+    
+
 
     public function create()
     {

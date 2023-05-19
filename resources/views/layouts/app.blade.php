@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" integrity="sha384-LwRi1UAdmY65E+gBWLq9lDR0A4N4bZa0+cUa+6M4Pr4YF/6MI/Es6U5X5iG2Spmf" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -131,16 +133,12 @@
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     @push('scripts')
     
-<link href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
-<script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-<script src="//cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
-<script src="//cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+
+<script src="{{ asset('js/sweetalert2.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+
 @endpush
+
 
 </body>
 </html>

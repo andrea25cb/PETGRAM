@@ -10,7 +10,8 @@ use App\Http\Controllers\AdoptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\GithubSocialiteController;
 use App\Http\Controllers\Auth\GoogleSocialiteController;
-use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Facades\Socialite;   
+use App\Http\Controllers\FollowController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,19 +74,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/{user}/follow', [UserController::class, 'followUser'])->name('followUser');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index'); 
-    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/showUser/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/createUser', [UserController::class, 'create'])->name('users.create');
+    Route::post('/createUser', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit'); 
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{user}', [UserController::class, 'updateUser'])->name('users.update');
-    
-    use App\Http\Controllers\FollowController;
 
     // Ruta para seguir a un usuario
-    Route::post('/follow/{user}', [FollowController::class, 'followUser'])->name('followUser')
+    Route::post('/follow/{user}', [FollowController::class, 'followUser'])->name('followUser');
    
 
     // Ruta para dejar de seguir a un usuario
-    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser')
+    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser');
         
 
     
