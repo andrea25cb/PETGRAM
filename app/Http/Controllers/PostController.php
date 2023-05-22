@@ -22,7 +22,7 @@ class PostController extends Controller
         // $username = User::select('username')->where('id','=', 1)->get()
       
     
-        return view('posts.index', compact('posts', 'users'));
+        return view('posts.index', compact('posts'));
     }
     
     
