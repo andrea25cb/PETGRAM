@@ -28,4 +28,14 @@ class FollowController extends Controller
 
         return back();
     }
+
+    public function isFollowing($userId)
+    {
+        $followerId = Auth::id();
+        $isFollowing = Follower::where('follower_id', $followerId)
+            ->where('following_id', $userId)
+            ->exists();
+
+        return $isFollowing;
+    }
 }

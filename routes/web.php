@@ -10,7 +10,7 @@ use App\Http\Controllers\AdoptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\GithubSocialiteController;
 use App\Http\Controllers\Auth\GoogleSocialiteController;
-use Laravel\Socialite\Facades\Socialite;   
+use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\FollowController;
 /*
 |--------------------------------------------------------------------------
@@ -23,27 +23,29 @@ use App\Http\Controllers\FollowController;
 |
 */
 // Route::get('/', function () {return view('home');});
-        /**
-         * LOGIN WITH GOOGLE: 
-         * */
-        Route::get('/auth/redirect', function () {return Socialite::driver('google')->redirect();})->name('login-google');
+/**
+ * LOGIN WITH GOOGLE: 
+ * */
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+})->name('login-google');
 
-        Route::get('/auth/callback', [GoogleSocialiteController::class, 'handleCallback']);
+Route::get('/auth/callback', [GoogleSocialiteController::class, 'handleCallback']);
 
-        /**
-         * LOGIN WITH GITHUB: 
-         * */
-        Route::get('auth/github', [GithubSocialiteController::class, 'gitRedirect']);
-        Route::get('auth/github/callback', [GithubSocialiteController::class, 'handleCallback']);
+/**
+ * LOGIN WITH GITHUB: 
+ * */
+Route::get('auth/github', [GithubSocialiteController::class, 'gitRedirect']);
+Route::get('auth/github/callback', [GithubSocialiteController::class, 'handleCallback']);
 
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt');
-    Route::post('/adopt', [AdoptionController::class, 'store'])->name('adopt.store');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt');
+Route::post('/adopt', [AdoptionController::class, 'store'])->name('adopt.store');
 
-    Route::get('/adopt/create', [AdoptionController::class, 'createPet'])->name('createPet');
-    Route::post('/adopt/create', [AdoptionController::class, 'storePet'])->name('storePet');
+Route::get('/adopt/create', [AdoptionController::class, 'createPet'])->name('createPet');
+Route::post('/adopt/create', [AdoptionController::class, 'storePet'])->name('storePet');
 
-    Route::get('/adopt/select/{id}', [AdoptionController::class, 'select'])->name('adopt.select');
+Route::get('/adopt/select/{id}', [AdoptionController::class, 'select'])->name('adopt.select');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -56,10 +58,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/{id}/edit', 'App\Http\Controllers\PostController@edit')->name('editPost');
 
     Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
-    
+
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
-    
+
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
@@ -73,43 +75,38 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{username}', [UserController::class, 'showProfile'])->name('user.profile');
     Route::post('/users/{user}/follow', [UserController::class, 'followUser'])->name('followUser');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users.index'); 
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/showUser/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/createUser', [UserController::class, 'create'])->name('users.create');
     Route::post('/createUser', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit'); 
+    Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{user}', [UserController::class, 'updateUser'])->name('users.update');
 
     // Ruta para seguir a un usuario
     Route::post('/follow/{user}', [FollowController::class, 'followUser'])->name('followUser');
-   
 
     // Ruta para dejar de seguir a un usuario
-    Route::post('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser');
-        
+    Route::delete('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser');
 
-    
+
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-
-
-
 });
 
-    /** 
-     * RUTAS ADMIN:
-     */
-    // Route::group(['middleware' => ['admin']], function() {
+/** 
+ * RUTAS ADMIN:
+ */
+// Route::group(['middleware' => ['admin']], function() {
 
-        
-    // Route::get('/admin/users', 'UserController@index')->name('admin.users.index');
-    // Route::resource('users', UsersController::class);
 
-    // Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+// Route::get('/admin/users', 'UserController@index')->name('admin.users.index');
+// Route::resource('users', UsersController::class);
 
-      
+// Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
-    // });
+
+
+// });
 
 
 Auth::routes();
