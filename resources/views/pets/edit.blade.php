@@ -55,42 +55,52 @@
                         </div>
                     </div>
 
-                   
 
                     <div class="row mb-3">
-                      <label for="species" class="col-md-4 col-form-label text-md-end">{{ __('Species') }}</label>
-                      <div class="col-md-8">
-                          <select class="form-control @error('species') is-invalid @enderror" id="species" name="species" required>
-                              <option value="" disabled selected>{{ __('Select species') }}</option>
-                              <option value="dog" {{ $pet->species === 'dog' ? 'selected' : '' }}>{{ __('Dog') }}</option>
-                              <option value="cat" {{ $pet->species === 'cat' ? 'selected' : '' }}>{{ __('Cat') }}</option>
-                              <option value="hamster" {{ $pet->species === 'hamster' ? 'selected' : '' }}>{{ __('Hamster') }}</option>
-                              <option value="snake" {{ $pet->species === 'snake' ? 'selected' : '' }}>{{ __('Snake') }}</option>
-                              <option value="pig" {{ $pet->species === 'pig' ? 'selected' : '' }}>{{ __('Pig') }}</option>
-                              <option value="guineapig" {{ $pet->species === 'guineapig' ? 'selected' : '' }}>{{ __('Guinea pig') }}</option>
-                              <option value="other" {{ $pet->species === 'other' ? 'selected' : '' }}>{{ __('Other') }}</option>
-                          </select>
-                          @error('species')
-                              <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                          @enderror
-                      </div>
-                  </div>
-                  
-                  <div class="row mb-3" id="otherSpeciesRow" style="{{ $pet->species !== 'other' ? 'display: none;' : '' }}">
-                      <label for="other_species" class="col-md-4 col-form-label text-md-end">{{ __('Other:') }}</label>
-                      <div class="col-md-8">
-                          <input id="other_species" type="text" class="form-control @error('other_species') is-invalid @enderror" name="other_species" value="{{ old('other_species', $pet->other_species) }}" required autocomplete="other_species">
-                  
-                          @error('other_species')
-                              <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                          @enderror
-                      </div>
-                  </div>
-                  
+                        <label for="species" class="col-md-4 col-form-label text-md-end">{{ __('Species') }}</label>
+                        <div class="col-md-8">
+                            <select class="form-control @error('species') is-invalid @enderror" id="species"
+                                name="species" required>
+                                <option value="" disabled selected>{{ __('Select species') }}</option>
+                                <option value="dog" {{ $pet->species === 'dog' ? 'selected' : '' }}>{{ __('Dog') }}
+                                </option>
+                                <option value="cat" {{ $pet->species === 'cat' ? 'selected' : '' }}>{{ __('Cat') }}
+                                </option>
+                                <option value="hamster" {{ $pet->species === 'hamster' ? 'selected' : '' }}>
+                                    {{ __('Hamster') }}</option>
+                                <option value="snake" {{ $pet->species === 'snake' ? 'selected' : '' }}>
+                                    {{ __('Snake') }}</option>
+                                <option value="pig" {{ $pet->species === 'pig' ? 'selected' : '' }}>{{ __('Pig') }}
+                                </option>
+                                <option value="guineapig" {{ $pet->species === 'guineapig' ? 'selected' : '' }}>
+                                    {{ __('Guinea pig') }}</option>
+                                <option value="other" {{ $pet->species === 'other' ? 'selected' : '' }}>
+                                    {{ __('Other') }}</option>
+                            </select>
+                            @error('species')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" id="otherSpeciesRow"
+                        style="{{ $pet->species !== 'other' ? 'display: none;' : '' }}">
+                        <label for="other_species"
+                            class="col-md-4 col-form-label text-md-end">{{ __('other species:') }}</label>
+                        <div class="col-md-8">
+                            <input id="other_species" type="text" name="other_species"
+                                value="{{ old('other_species', $pet->other_species) }}" autocomplete="other_species">
+
+                            @error('other_species')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+
 
                     <div class="row mb-3">
                         <label for="age" class="col-md-4 col-form-label text-md-end">{{ __('Age') }}</label>
@@ -153,7 +163,7 @@
             // Función para mostrar u ocultar el campo de entrada adicional
             function toggleOtherSpeciesInput() {
                 if (speciesSelect.value === 'other') {
-                    otherSpeciesRow.style.display = 'block';
+                    otherSpeciesRow.style.display = '';
                 } else {
                     otherSpeciesRow.style.display = 'none';
                 }
