@@ -10,7 +10,6 @@ use App\Mail\AdoptionConfirmation;
 
 class AdoptionController extends Controller
 {
-// hola
     public function index()
     {
         $pets = Pet::where('adopted', false)->get();

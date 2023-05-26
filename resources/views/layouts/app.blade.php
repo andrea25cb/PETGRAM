@@ -73,6 +73,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('pets.index') }}">{{ __('Pets') }}</a>
+                                </li>
                             @endif
                             <li class="nav-item">
                                 <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false"

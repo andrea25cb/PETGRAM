@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\AdoptionController;
+use App\Http\Controllers\PetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\GithubSocialiteController;
 use App\Http\Controllers\Auth\GoogleSocialiteController;
@@ -39,6 +40,7 @@ Route::get('auth/github', [GithubSocialiteController::class, 'gitRedirect']);
 Route::get('auth/github/callback', [GithubSocialiteController::class, 'handleCallback']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt');
 Route::post('/adopt', [AdoptionController::class, 'store'])->name('adopt.store');
 
@@ -89,6 +91,23 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para dejar de seguir a un usuario
     Route::delete('/unfollow/{user}', [FollowController::class, 'unfollowUser'])->name('unfollowUser');
 
+
+    /**ADMIN: PETS */
+    //que hago para la vista de pets.index.... uso las rutas de adoptar? le cambio el nombre a las rutas..? help
+    // //aunque si son vistas diferentes, aunque me sirva el mismo metodo, en el metodo hago return de otra vista, no?
+    Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
+
+    Route::get('/pets/edit/{pet}', [PetController::class, 'edit'])->name('pets.edit');
+    Route::put('/pets/{pet}', [PetController::class, 'update'])->name('pets.update');
+
+
+    Route::get('/pets/create', [PetController::class, 'create'])->name('pets.create');
+    Route::post('/pets', [PetController::class, 'store'])->name('pets.store');
+
+    Route::get('/pets/select/{id}', [PetController::class, 'select'])->name('pets.select');
+
+  
+    Route::delete('/pets/{pet}', [PetController::class, 'destroy'])->name('pets.destroy');
 
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 });
