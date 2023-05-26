@@ -16,7 +16,6 @@
                 {{-- <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="Post Image" width="200px"  height="250px"> --}}
                 <div class="card-body center">
                     <p class="card-text"><b>{{ $post->user_id }}</b></p>
-                    {{-- <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary"><i class="material-icons">comment</i></a> --}}
                     <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="btn btn-primary"><i class="material-icons">comment</i></a>
 
                     @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->id == $post->user_id))

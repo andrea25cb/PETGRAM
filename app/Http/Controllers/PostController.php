@@ -18,15 +18,12 @@ class PostController extends Controller
             array_push($userIds, Auth::id());
             $posts = Post::whereIn('user_id', $userIds)->paginate(5);
         }
-    
+
         // $username = User::select('username')->where('id','=', 1)->get()
-      
-    
+
+
         return view('posts.index', compact('posts'));
     }
-    
-    
-
 
     public function create()
     {
@@ -52,43 +49,46 @@ class PostController extends Controller
 
         return redirect()->route('posts')->with('success', 'Post created successfully.');
     }
-    public function show(Post $post)
+    public function show($id)
     {
+        $post = Post::with('comments')->findOrFail($id);
         return view('posts.show', compact('post'));
     }
+    
 
     public function edit(Post $post)
     {
         $currentPhoto = $post->photo;
-        return view('posts.edit', compact('post', 'currentPhoto')); 
+        return view('posts.edit', compact('post', 'currentPhoto'));
     }
     
+
     public function update(Request $request, Post $post)
     {
         $request->validate([
             'photo' => 'image|max:2048',
             'description' => 'required',
         ]);
-    
+
         $post->description = $request->description;
-    
+
         if ($request->hasFile('photo')) {
             $imageName = time() . '.' . $request->photo->extension();
             $request->photo->move(public_path('images'), $imageName);
             $post->photo = $imageName;
         }
-    
+
         // Si no se selecciona una nueva imagen, mantén la actual
         else {
             $post->photo = $post->photo;
         }
-    
+
         $post->save();
-    
+
         return redirect()->route('posts')->with('success', 'Post updated successfully.');
     }
-      
-    
+
+
     public function destroy(Post $post)
     {
         if (Auth::user()->isAdmin() || Auth::id() == $post->user_id) {
@@ -99,5 +99,4 @@ class PostController extends Controller
             abort(403);
         }
     }
-    
 }

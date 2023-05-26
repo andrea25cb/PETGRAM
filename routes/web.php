@@ -52,12 +52,12 @@ Route::get('/adopt/select/{id}', [AdoptionController::class, 'select'])->name('a
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts');
-    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/showPost/{id}', [PostController::class, 'show'])->name('posts.show');
 
     Route::get('/createPost', [PostController::class, 'create'])->name('createPost');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     // Route::get('/editpost/{id}', [PostController::class, 'edit'])->name('editPost');
-    Route::get('/posts/{id}/edit', 'App\Http\Controllers\PostController@edit')->name('editPost');
+    Route::get('/editPost/{id}', [PostController::class, 'edit'])->name('editPost');
 
     Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 

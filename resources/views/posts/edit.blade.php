@@ -14,6 +14,8 @@
 
             <div class="mb-3">
                 <label for="photo" class="form-label">{{ __('Post Image') }}</label>
+                <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px"
+                height="300px">
                 <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
                 @if($currentPhoto)
                     <input type="hidden" name="current_photo" value="{{ $currentPhoto }}">
@@ -26,6 +28,7 @@
                 <textarea class="form-control" id="description" name="description" rows="3" required>{{ $post->description ?? '' }}</textarea>
             </div>
 
+            <a href="../" class="btn btn-dark">{{ __('Back') }}</a>
             <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
 
         </form>
