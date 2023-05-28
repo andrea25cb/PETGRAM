@@ -13,12 +13,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="icon" type="image/jpg" href="{{ asset('images/petgram_logo.png') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/laravel-scroll-pagination/scroll-pagination.css') }}"> --}}
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="{{ asset('vendor/laravel-scroll-pagination/scroll-pagination.js') }}"></script> --}}
 </head>
 
 <body>

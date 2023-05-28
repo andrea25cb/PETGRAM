@@ -63,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
+    Route::post('/comments/fetch', [CommentController::class, 'fetch'])->name('comments.fetch');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
@@ -78,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/{user}/follow', [UserController::class, 'followUser'])->name('followUser');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/showUser/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/createUser', [UserController::class, 'create'])->name('users.create');
     Route::post('/createUser', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit');

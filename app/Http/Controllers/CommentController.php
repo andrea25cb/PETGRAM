@@ -9,18 +9,21 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'content' => 'required|min:10',
+            'content' => 'required',
             'post_id' => 'required|exists:posts,id',
         ]);
-
+    
         $comment = new Comment();
         $comment->content = $validatedData['content'];
         $comment->post_id = $validatedData['post_id'];
         $comment->user_id = auth()->user()->id;
         $comment->save();
-
-        return redirect()->back()->with('success', 'Comment added successfully!');
+    
+        $post = $comment->post()->with('comments')->first();
+    
+        return redirect()->back()->with('success', 'Comment added successfully!')->with('post', $post);
     }
+    
 
     public function destroy(Comment $comment)
     {

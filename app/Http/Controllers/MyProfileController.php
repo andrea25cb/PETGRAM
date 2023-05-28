@@ -16,9 +16,12 @@ class MyProfileController extends Controller
         $numFollowers = $user->followers()->count();
         $numFollowing = $user->followings()->count();
         $profile_image = $user->profile_image;
-
-        return view('myprofile.index', compact('user', 'posts', 'numPosts', 'numFollowers', 'numFollowing', 'profile_image'));
+        $following = $user->followings;
+        $followers = $user->followers; // Agregar esta línea para obtener la lista de seguidores
+    
+        return view('myprofile.index', compact('user', 'posts', 'numPosts', 'numFollowers', 'numFollowing', 'profile_image', 'following', 'followers'));
     }
+    
 
     public function edit()
     {

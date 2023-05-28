@@ -3,34 +3,42 @@
 @section('content')
     <div class="container">
         <a href="../posts" class="btn btn-dark">{{ __('Back') }}</a>
-        <div class="card w-50">
-            {{-- {{--  --}}
-            @if (empty($post->photo))
-                <p>No image found</p>
-            @else 
-            <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px"
-                height="300px">
-            @endif
-
-          <div class="card-body">
-                <h5 class="card-title">{{ $post->description }}</h5>
-                {{-- <p class="card-text">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p> --}}
-                <hr>
-                <h6 class="card-subtitle mb-2 text-muted">Comments:</h6>
-
-                @if (is_iterable($post->comments) && count($post->comments) > 0)
-                @foreach ($post->comments as $comment)
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <p class="card-text">{{ $comment->content }}</p>
-                            <p class="card-text">Commented by {{ $comment->user->name }} on {{ $comment->created_at->format('F j, Y') }}</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    @if (empty($post->photo))
+                        <p>No image found</p>
+                    @else 
+                        <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px"
+                            height="300px">
+                    @endif
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $post->description }}</h5>
+                        {{-- <p class="card-text">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p> --}}
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Comments:</h6>
+                        <div class="comment-container" style="height: 300px; overflow-y: auto;">
+                            @if (is_iterable($post->comments) && count($post->comments) > 0)
+                                @foreach ($post->comments as $comment)
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <p class="card-text">{{ $comment->content }}</p>
+                                            <p class="card-text">Commented by {{ $comment->user->name }} on {{ $comment->created_at->format('F j, Y') }}</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p>No comments yet.</p>
+                            @endif
                         </div>
                     </div>
-                @endforeach
-            @else
-                <p>No comments yet.</p>
-            @endif
-            
+                </div>
                 <form method="POST" action="{{ route('comments.store') }}">
                     @csrf
                     <input type="hidden" name="post_id" value="{{ $post->id }}">
@@ -40,6 +48,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
+
                 @if (optional(Auth::user())->isAdmin() || (Auth::user() && Auth::user()->id == $post->user_id))
                     <hr>
                     <div class="d-flex justify-content-between">
@@ -54,7 +63,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -76,7 +84,6 @@
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     @endif
-
                 </div>
             </div>
         </div>

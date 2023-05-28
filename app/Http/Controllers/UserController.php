@@ -104,8 +104,8 @@ class UserController extends Controller
         // Validate input data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'username' => 'required|string|max:255,' . $user->id,
+            'email' => 'required|string|email|max:255,' . $user->id,
             'bio' => 'nullable|string|max:500',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -217,24 +217,24 @@ class UserController extends Controller
     
         // Obtener los posts del usuario ordenados por fecha descendente
         $posts = $user->posts;
-        $posts = $user->posts;
         $numPosts = $user->posts()->count();
         $numFollowers = $user->followers()->count();
         $numFollowing = $user->followings()->count();
         $profile_image = $user->profile_image;
+    
+        // Obtener la lista de seguidores y seguidos del usuario
+        $followers = $user->followers()->get();
+        $following = $user->followings()->get();
     
         // Verificar si el usuario autenticado sigue a alguien
         $isFollowing = false;
         if (auth()->check()) {
             $isFollowing = auth()->user()->following ? auth()->user()->following->contains($user->id) : false;
         }
-
-        return view('users.profile'
-            // 'user' => $user,
-            // 'posts' => $posts,
-            // 'isFollowing' => $isFollowing
-        , compact('user', 'posts', 'numPosts', 'numFollowers', 'numFollowing', 'profile_image', 'isFollowing'));
-    }    
+    
+        return view('users.profile', compact('user', 'posts', 'numPosts', 'numFollowers', 'numFollowing', 'profile_image', 'isFollowing', 'followers', 'following'));
+    }
+    
 
     public function followUser(Request $request)
     {
