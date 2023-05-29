@@ -61,6 +61,7 @@
                         <div class="col-md-8">
                             <select class="form-control @error('species') is-invalid @enderror" id="species"
                                 name="species" required>
+                                <option value="{{ old( $pet->species) }}"></option>
                                 <option value="" disabled selected>{{ __('Select species') }}</option>
                                 <option value="dog" {{ $pet->species === 'dog' ? 'selected' : '' }}>{{ __('Dog') }}
                                 </option>
@@ -90,7 +91,7 @@
                         <label for="other_species"
                             class="col-md-4 col-form-label text-md-end">{{ __('other species:') }}</label>
                         <div class="col-md-8">
-                            <input id="other_species" type="text" name="other_species"
+                            <input id="other_species" class="form-control" type="text" name="other_species"
                                 value="{{ old('other_species', $pet->other_species) }}" autocomplete="other_species">
 
                             @error('other_species')

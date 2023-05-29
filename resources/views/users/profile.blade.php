@@ -14,12 +14,12 @@
                         <div class="d-flex">
                             <span class="me-4 fs-5">{{ $numPosts }} Posts</span>
                             <span class="me-4 fs-5">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#followersModal">
+                                <a href="#" data-bs-toggle="modal"  class="text-decoration-none text-black" data-bs-target="#followersModal">
                                     {{ $numFollowers }} Followers
                                 </a>
                             </span>
                             <span class="me-4 fs-5">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#followingModal">
+                                <a href="#" data-bs-toggle="modal"  class="text-decoration-none text-black" data-bs-target="#followingModal">
                                     {{ $numFollowing }} Following
                                 </a>
                             </span>

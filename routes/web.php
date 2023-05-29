@@ -51,6 +51,9 @@ Route::get('/adopt/select/{id}', [AdoptionController::class, 'select'])->name('a
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/posts/like', 'PostController@like')->name('posts.like');
+
+
     Route::get('/posts', [PostController::class, 'index'])->name('posts');
     Route::get('/showPost/{id}', [PostController::class, 'show'])->name('posts.show');
 
@@ -59,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/editpost/{id}', [PostController::class, 'edit'])->name('editPost');
     Route::get('/editPost/{id}', [PostController::class, 'edit'])->name('editPost');
 
-    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+    Route::put('/editPost/{id}', [PostController::class, 'update'])->name('posts.update');
 
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 

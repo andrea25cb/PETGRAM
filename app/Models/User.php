@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -114,5 +115,37 @@ class User extends Authenticatable
     public function unfollow(User $user)
     {
         $this->followings()->detach($user->id);
+    }
+
+     /**
+     * Get the posts that the user has liked.
+     */
+    public function likedPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')->withTimestamps();
+    }
+
+    /**
+     * Check if the user has liked a post.
+     */
+    public function hasLiked(Post $post): bool
+    {
+        return $this->likedPosts()->where('post_id', $post->id)->exists();
+    }
+
+    /**
+     * Like a post.
+     */
+    public function like(Post $post): void
+    {
+        $this->likedPosts()->attach($post->id);
+    }
+
+    /**
+     * Unlike a post.
+     */
+    public function unlike(Post $post): void
+    {
+        $this->likedPosts()->detach($post->id);
     }
 }

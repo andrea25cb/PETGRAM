@@ -14,8 +14,8 @@
                     @endif
                     <div class="card-body">
                         <h5 class="card-title">{{ $post->description }}</h5>
-                        {{-- <p class="card-text">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p> --}}
                         <hr>
+                        <h5 class="card-title"><b><a href="{{ route('user.profile', $user->username) }}" class="text-decoration-none text-black">{{ $user->username }}</a></b></h5>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-muted">Comments:</h6>
-                        <div class="comment-container" style="height: 300px; overflow-y: auto;">
+                        <div class="comment-container" style="height: 200px; overflow-y: auto;">
                             @if (is_iterable($post->comments) && count($post->comments) > 0)
                                 @foreach ($post->comments as $comment)
                                     <div class="card mb-3">
@@ -46,7 +46,7 @@
                         <label for="content" class="form-label">Add a comment:</label>
                         <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">COMMENT</button>
                 </form>
 
                 @if (optional(Auth::user())->isAdmin() || (Auth::user() && Auth::user()->id == $post->user_id))
