@@ -36,9 +36,9 @@
                             </button>                            
                            
                              @if (! $post->liked)
-                            <a href="{{ route('posts.like', $post) }}" class="btn btn-outline-secondary like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
+                            <a type="button" href="{{ route('posts.like', $post) }}" class="btn btn-outline-secondary like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
                         @else
-                            <a href="{{ route('posts.unlike', $post) }}" class="btn btn-warning like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
+                            <a type="button" href="{{ route('posts.unlike', $post) }}" class="btn btn-warning like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
                         @endif
                         </div>
                     </div>
