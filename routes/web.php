@@ -51,9 +51,19 @@ Route::get('/adopt/select/{id}', [AdoptionController::class, 'select'])->name('a
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/posts/like', 'PostController@like')->name('posts.like');
+    
+    /** 
+ * like or dislike a post:
+ */
+    Route::get('/posts/{post}/like', 'PostController@like')->name('posts.like');
+    Route::get('/posts/{post}/unlike', 'PostController@unlike')->name('posts.unlike');
 
+    Route::get('/posts/{post}/dislike', 'PostController@dislike')->name('posts.dislike');
+    Route::get('/posts/{post}/undislike', 'PostController@undislike')->name('posts.undislike');
 
+    /** 
+ * POSTS:
+ */
     Route::get('/posts', [PostController::class, 'index'])->name('posts');
     Route::get('/showPost/{id}', [PostController::class, 'show'])->name('posts.show');
 
@@ -66,19 +76,30 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
+    /** 
+ * COMMENT A POST:
+ */
     Route::post('/comments/fetch', [CommentController::class, 'fetch'])->name('comments.fetch');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-
+/** 
+ * MY PROFILE SHOW AND EDIT:
+ */
     Route::get('/myprofile', [MyProfileController::class, 'index'])->name('myprofile');
     Route::get('/myprofile/edit', [MyProfileController::class, 'edit'])->name('myprofile.edit');
     Route::put('/myprofile', [MyProfileController::class, 'update'])->name('myprofile.update');
 
+    /** 
+ * SEARCH USERS:
+ */
     Route::get('/search', [SearchController::class, 'index'])->name('search');
 
     Route::get('/users/{username}', [UserController::class, 'showProfile'])->name('user.profile');
+    /** 
+ * FOLLOW USER:
+ */
     Route::post('/users/{user}/follow', [UserController::class, 'followUser'])->name('followUser');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
