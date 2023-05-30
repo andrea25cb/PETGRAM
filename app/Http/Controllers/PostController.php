@@ -27,12 +27,12 @@ class PostController extends Controller
     }
 
     // Obtén la cantidad de likes de cada post
-    $likesCount = [];
-    foreach ($posts as $post) {
-        $likesCount[$post->id] = $post->likes()->count();
-    }
+   // $likesCount = [];
+    //foreach ($posts as $post) {
+      //  $likesCount[$post->id] = $post->likes()->count();
+    //}
 
-    return view('posts.index', compact('posts', 'users', 'likesCount'));
+    return view('posts.index', compact('posts', 'users'));
 }
 
 
@@ -41,38 +41,19 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function like(Request $request)
+public function like(Post $post)
     {
-        $postId = $request->input('post_id');
-        $userId = Auth::id(); // Obtén el ID del usuario actualmente autenticado
-    
-        // Verifica si el usuario ya ha dado like a este post
-        $existingLike = Like::where('user_id', $userId)->where('post_id', $postId)->first();
-    
-        if ($existingLike) {
-            // El usuario ya ha dado like, puedes manejarlo de la forma que desees (por ejemplo, mostrar un mensaje de error)
-            return response()->json(['message' => 'Ya has dado like a esta publicación.']);
-        }
-    
-        // Crea un nuevo like
-        $like = new Like();
-        $like->user_id = $userId;
-        $like->post_id = $postId;
-        $like->save();
-    
-        // Incrementa la cantidad de likes en el post
-        $post = Post::find($postId);
-        $post->likes_count++;
-        $post->save();
-    
-        // Obtén la cantidad de likes actualizada
-        $likesCount = $post->likes_count;
-    
-        // Retorna la cantidad de likes actualizada en formato JSON
-        return response()->json(['likesCount' => $likesCount]);
-        
+        $post->likeBy();
+
+        return back();
     }
-    
+
+    public function unlike(Post $post)
+    {
+        $post->unlikeBy();
+
+        return back();
+    }
 
     public function store(Request $request)
     {
