@@ -34,7 +34,12 @@
                             <button type="button" class="btn btn-outline-warning like-button" data-post-id="{{ $post->id }}">
                                 <i class="material-icons">favorite</i>
                             </button>                            
-                            <span class="likes-count">{{ $likesCount[$post->id] }}</span> Likes
+                           
+                             @if (! $post->liked)
+                            <a href="{{ route('posts.like', $post) }}" class="btn btn-outline-secondary like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
+                        @else
+                            <a href="{{ route('posts.unlike', $post) }}" class="btn btn-warning like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
+                        @endif
                         </div>
                     </div>
                 </div>
