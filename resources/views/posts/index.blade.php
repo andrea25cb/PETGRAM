@@ -28,18 +28,32 @@
                                 <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning"><i
                                         class="material-icons">edit</i></a>
 
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                                     data-bs-target="#deletePostModal"><i class="material-icons">delete</i></button>
                             @endif
-                            <button type="button" class="btn btn-outline-warning like-button" data-post-id="{{ $post->id }}">
+                            {{-- @php
+                                $userLiked = $post->likes->contains('user_id', auth()->id());
+                            @endphp
+
+                            <button type="button"
+                                class="btn {{ $userLiked ? 'btn-danger' : 'btn-outline-secondary' }} like-button"
+                                data-post-id="{{ $post->id }}">
                                 <i class="material-icons">favorite</i>
-                            </button>                            
-                           
-                             @if (! $post->liked)
-                            <a type="button" href="{{ route('posts.like', $post) }}" class="btn btn-outline-secondary like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
-                            @else
-                            <a type="button" href="{{ route('posts.unlike', $post) }}" class="btn btn-warning like-button">({{ $post->likesCount }})<i class="material-icons">favorite</i></a>
-                            @endif
+                            </button>
+                            <span class="likes-count">{{ $likesCount[$post->id] }}</span> --}}
+                            <form action="{{ route('posts.like', $post) }}" method="POST" class="like-form">
+                                @csrf
+                                <button type="submit" class="btn btn-success like-button @if ($post->likes()->where('user_id', auth()->id())->exists()) liked @endif">
+                                    @if ($post->likes()->where('user_id', auth()->id())->exists())
+                                        <3
+                                    @else
+                                        <3
+                                    @endif
+                                </button>
+                            </form>
+                            
+                            {{-- <span class="likes-count">{{ $likesCount[$post->id] }} likes</span>  --}}
+                            
                         </div>
                     </div>
                 </div>
@@ -78,29 +92,29 @@
     <br><br>
     <script>
         $(document).ready(function() {
-            $('.like-button').on('click', function() {
-                var postId = $(this).data('post-id');
-                var button = $(this);
-    
-                // Realiza una solicitud AJAX para dar like al post
+            $('.like-form').submit(function(event) {
+                event.preventDefault();
+                var $button = $(this).find('.like-button');
+                var isLiked = $button.hasClass('liked');
+                
+                if (isLiked) {
+                    $button.removeClass('liked');
+                    $button.text('<3');
+                } else {
+                    $button.addClass('liked');
+                    $button.text('<3');
+                }
+                
+                // Submit the form via AJAX
                 $.ajax({
-                    url: '/posts/like',
+                    url: $(this).attr('action'),
                     method: 'POST',
-                    data: {
-                        post_id: postId
-                    },
+                    data: $(this).serialize(),
                     success: function(response) {
-                        // Si la solicitud se realiza con éxito, actualiza el botón y muestra la cantidad de likes actualizada
-                        button.toggleClass('btn-outline-secondary btn-danger');
-                        button.find('.material-icons').text('favorite');
-    
-                        // Actualiza la cantidad de likes en la publicación
-                        var likesCount = response.likesCount;
-                        button.parent().find('.likes-count').text(likesCount);
+                        // Handle success response if needed
                     },
-                    error: function() {
-                        // Maneja el error en caso de que la solicitud falle
-                        alert('Error al dar like al post');
+                    error: function(xhr, status, error) {
+                        // Handle error response if needed
                     }
                 });
             });
@@ -108,4 +122,9 @@
     </script>
     
     
+    <style>.like-button.liked {
+        background-color: rgb(255, 116, 116);
+        /* Add any other styling you want for the liked button */
+    }
+    </style>
 @endsection

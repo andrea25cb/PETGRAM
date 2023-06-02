@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -136,16 +137,9 @@ class User extends Authenticatable
     /**
      * Like a post.
      */
-    public function like(Post $post): void
+    public function likes(): HasMany
     {
-        $this->likedPosts()->attach($post->id);
+        return $this->hasMany(Like::class);
     }
-
-    /**
-     * Unlike a post.
-     */
-    public function unlike(Post $post): void
-    {
-        $this->likedPosts()->detach($post->id);
-    }
+    
 }

@@ -11,48 +11,34 @@ use App\Models\Like;
 class PostController extends Controller
 {
     public function index()
-{
-    if (Auth::user()->isAdmin()) {
-        $posts = Post::paginate(8);
-    } else {
-        $userIds = Auth::user()->followings()->pluck('users.id')->toArray();
-        array_push($userIds, Auth::id());
-        $posts = Post::whereIn('user_id', $userIds)->paginate(5);
+    {
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            $posts = Post::with('likes')->paginate(8);
+        } else {
+            $userIds = $user->followings()->pluck('users.id')->toArray();
+            array_push($userIds, $user->id);
+            $posts = Post::with('likes')->whereIn('user_id', $userIds)->paginate(5);
+        }
+
+        $users = [];
+        foreach ($posts as $post) {
+            $user = User::select('username')->where('id', $post->user_id)->value('username');
+            $users[$post->id] = $user;
+        }
+        // Obtener el recuento de "likes" para cada post
+        $likesCount = [];
+        foreach ($posts as $post) {
+            $likesCount[$post->id] = $post->likes()->count();
+        }
+
+        return view('posts.index', compact('posts', 'users', 'likesCount'));
     }
-
-    $users = [];
-    foreach ($posts as $post) {
-        $user = User::select('username')->where('id', $post->user_id)->value('username');
-        $users[$post->id] = $user;
-    }
-
-    // Obtén la cantidad de likes de cada post
-   // $likesCount = [];
-    //foreach ($posts as $post) {
-      //  $likesCount[$post->id] = $post->likes()->count();
-    //}
-
-    return view('posts.index', compact('posts', 'users'));
-}
 
 
     public function create()
     {
         return view('posts.create');
-    }
-
-public function like(Post $post)
-    {
-        $post->likeBy();
-
-        return back();
-    }
-
-    public function unlike(Post $post)
-    {
-        $post->unlikeBy();
-
-        return back();
     }
 
     public function store(Request $request)
@@ -78,10 +64,10 @@ public function like(Post $post)
     {
         $post = Post::with('comments')->findOrFail($id);
         $user = User::findOrFail($post->user_id);
-    
+
         return view('posts.show', compact('post', 'user'));
     }
-    
+
 
     public function edit($id)
     {
@@ -100,35 +86,33 @@ public function like(Post $post)
             'photo' => 'image|max:2048',
             'description' => 'required',
         ]);
-    
+
         $post->description = $request->description;
-        $post->user_id = $request->user_id;
-    
+
         if ($request->hasFile('photo')) {
             $imageName = time() . '.' . $request->photo->extension();
             $request->photo->move(public_path('images'), $imageName);
             $post->photo = $imageName;
         }
-    
+
         // Si no se selecciona una nueva imagen, mantén la actual
         else {
             $post->photo = $post->photo;
         }
-    
+
         $post->save();
-    
+
         // Verificar si se ha dado like
-        if ($request->has('like')) {
-            // Realizar las operaciones necesarias para agregar el like en la base de datos
-    
-            // Por ejemplo, puedes hacer lo siguiente:
-            $user = Auth::user();
-            $post->likes()->attach($user->id);
-        }
-    
+        // if ($request->has('like')) {
+        //     // Realizar las operaciones necesarias para agregar el like en la base de datos
+
+        //     // Por ejemplo, puedes hacer lo siguiente:
+        //     $user = Auth::user();
+        //     $post->likes()->attach($user->id);
+        // }
+
         return redirect()->route('posts')->with('success', 'Post updated successfully.');
     }
-    
 
 
     public function destroy(Post $post) //me borra siempre el ultimo...
@@ -141,4 +125,6 @@ public function like(Post $post)
             abort(403);
         }
     }
+    
+
 }
