@@ -29,7 +29,15 @@
                                     <div class="card mb-3">
                                         <div class="card-body">
                                             <p class="card-text">{{ $comment->content }}</p>
-                                            <p class="card-text">Commented by {{ $comment->user->name }} on {{ $comment->created_at->format('F j, Y') }}</p>
+                                            <p class="card-text">
+                                                @if ($comment->user)
+                                                    Commented by {{ $comment->user->username }} on {{ $comment->created_at->format('F j, Y') }}
+                                                @else
+                                                    Commented by Deleted User on {{ $comment->created_at->format('F j, Y') }}
+                                                @endif
+                                            </p>
+                                            
+                                            {{-- <p class="card-text">Commented by {{ $comment->user->username }} on {{ $comment->created_at->format('F j, Y') }}</p> --}}
                                         </div>
                                     </div>
                                 @endforeach

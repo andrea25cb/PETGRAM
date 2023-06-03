@@ -148,9 +148,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        $user = User::withTrashed()->get();
-        return redirect()->route('users.index')->with('delete', 'ok');
+    
+        return redirect()->back()->with('success', 'User deleted successfully');
     }
+    
 
     /**
      * Show the form for editing the specified resource.

@@ -13,6 +13,8 @@ use App\Models\User;
 use Illuminate\Http\Request;   
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Two\InvalidStateException;
+
 class GoogleSocialiteController extends Controller
 {
     
@@ -35,25 +37,35 @@ class GoogleSocialiteController extends Controller
     */
     public function handleCallback()
     {  
-        $googleUser = Socialite::driver('google')->user();
-
-            $user = User::updateOrCreate([
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (InvalidStateException $e) {
+            // Manejar la excepción
+            return redirect()->route('login-google')->with('error', 'Error al autenticar con Google.');
+        }
+    
+        // Verificar si el usuario ya existe en la base de datos
+        $user = User::where('external_id', $googleUser->id)->first();
+    
+        if ($user) {
+            // Si el usuario existe, inicia sesión
+            Auth::login($user);
+        } else {
+            // Si el usuario no existe, crea un nuevo usuario en la base de datos
+            $user = User::create([
                 'external_id' => $googleUser->id,
-            ], [
                 'name' => $googleUser->name,
                 'username' => $googleUser->email,
                 'email' => $googleUser->email,
-                'avatar' => $googleUser->avatar,
+                'profile_image' => $googleUser->avatar_original,
                 'password' => encrypt('gitpwd059'),
-                'external_id' => $googleUser->id,
-                'external_auth' => 'google', //provider
+                'external_auth' => 'google',
             ]);
-         
-            // if (!$user->tlf) {
-            //     return redirect()->route('completar-registro');
-            // }
-            Auth::login($user);
     
-            return redirect('/');
-}
+            // Inicia sesión con el nuevo usuario
+            Auth::login($user);
+        }
+    
+        return redirect('/');
+    }
 }

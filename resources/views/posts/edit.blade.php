@@ -8,14 +8,15 @@
         <div class="card-header">{{ __('Edit Post') }}</div>
         <div class="card-body">
        
-            <form method="POST" action="{{ route('posts.update', ['id' => $post->id]) }}" enctype="multipart/form-data">
+            {{-- <form method="POST" action="{{ route('posts.update', ['id' => $post->id]) }}" enctype="multipart/form-data"> --}}
+                <form method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
 
             <div class="mb-3">
                 <label for="photo" class="form-label">{{ __('Post Image') }}</label>
-                <input type="hidden" name="user_id" value="{{ $post->user_id }}">
+                <input type="hidden" id="user_id" name="user_id" value="{{ $post->user_id }}">
                 
               <br>
                 @if($currentPhoto)

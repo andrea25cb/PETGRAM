@@ -66,12 +66,13 @@ Route::middleware(['auth'])->group(function () {
 
    Route::get('/createPost', [PostController::class, 'create'])->name('createPost');
    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-   // Route::get('/editpost/{id}', [PostController::class, 'edit'])->name('editPost');
-   Route::get('/editPost/{id}', [PostController::class, 'edit'])->name('editPost');
 
-   Route::put('/editPost/{id}', [PostController::class, 'update'])->name('posts.update');
+   Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('editPost');
+   Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 
-   Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+   Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+
 
    /** 
     * COMMENT A POST:
@@ -104,8 +105,10 @@ Route::middleware(['auth'])->group(function () {
    Route::get('/createUser', [UserController::class, 'create'])->name('users.create');
    Route::post('/createUser', [UserController::class, 'store'])->name('users.store');
    Route::get('/users/edit/{user}', [UserController::class, 'editUser'])->name('users.edit');
-   Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
    Route::put('/users/{user}', [UserController::class, 'updateUser'])->name('users.update');
+   Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
 
    // Ruta para seguir a un usuario
    Route::post('/follow/{user}', [FollowController::class, 'followUser'])->name('followUser');

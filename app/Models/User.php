@@ -29,6 +29,10 @@ class User extends Authenticatable
         'profile_image',
         'is_private',
         'type',
+        'external_id',
+        'external_auth',
+        'remenber_token',
+        'deleted_at'
     ];
 
     /**

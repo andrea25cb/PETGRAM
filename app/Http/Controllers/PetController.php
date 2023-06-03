@@ -35,7 +35,7 @@ class PetController extends Controller
         return view('pets.create');
     }
 
-  
+
 
     public function store(Request $request)
     {
@@ -70,10 +70,10 @@ class PetController extends Controller
         return redirect()->route('pets.index')
             ->with('success', 'Pet created successfully.');
     }
-      public function edit(Pet $pet)
+    public function edit(Pet $pet)
     {
         $currentPhoto = $pet->photo;
-        return view('pets.edit',compact('pet', 'currentPhoto'));
+        return view('pets.edit', compact('pet', 'currentPhoto'));
     }
 
     public function update(Request $request, Pet $pet)
@@ -86,7 +86,7 @@ class PetController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string|max:500',
         ]);
-    
+
         $pet->name = $request->input('name');
         $species = $request->input('species');
         if ($species === 'other') {
@@ -97,27 +97,25 @@ class PetController extends Controller
         $pet->age = $request->input('age');
         $pet->gender = $request->input('gender');
         $pet->description = $request->input('description');
-    
+
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
             $filename = $photo->getClientOriginalName();
             $path = $photo->storeAs('public/pets', $filename);
             $pet->photo = $filename;
         }
-    
+
         $pet->save();
-    
+
         return redirect()->route('pets.index')
             ->with('success', 'Pet updated successfully.');
     }
-    
 
-public function destroy(Pet $pet)
-{
-    $pet->delete();
 
-    return redirect()->route('pets.index')
-        ->with('success', 'Pet deleted successfully.');
-}
+    public function destroy(Pet $pet)
+    {
+        $pet->delete();
 
+        return redirect()->back()->with('success', 'Pet deleted successfully');
+    }
 }

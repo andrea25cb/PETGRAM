@@ -14,27 +14,26 @@ class PostController extends Controller
     {
         $user = Auth::user();
         if ($user->isAdmin()) {
-            $posts = Post::with('likes')->paginate(8);
+            $posts = Post::with('likes')->whereNull('deleted_at')->paginate(8);
         } else {
             $userIds = $user->followings()->pluck('users.id')->toArray();
             array_push($userIds, $user->id);
-            $posts = Post::with('likes')->whereIn('user_id', $userIds)->paginate(5);
+            $posts = Post::with('likes')
+                ->whereIn('user_id', $userIds)
+                ->whereNull('deleted_at')
+                ->orderByDesc('created_at') // Ordena las publicaciones más recientes primero
+                ->paginate(5);
         }
-
+    
         $users = [];
         foreach ($posts as $post) {
             $user = User::select('username')->where('id', $post->user_id)->value('username');
             $users[$post->id] = $user;
         }
-        // Obtener el recuento de "likes" para cada post
-        $likesCount = [];
-        foreach ($posts as $post) {
-            $likesCount[$post->id] = $post->likes()->count();
-        }
-
-        return view('posts.index', compact('posts', 'users', 'likesCount'));
+    
+        return view('posts.index', compact('posts', 'users'));
     }
-
+    
 
     public function create()
     {
@@ -55,11 +54,12 @@ class PostController extends Controller
         $post = new Post;
         $post->photo = $imageName;
         $post->description = $request->description;
-        $post->user_id = auth()->user()->id;
+        $post->user_id = auth()->user()->id; // Asignar el ID del usuario autenticado
         $post->save();
 
         return redirect()->route('posts')->with('success', 'Post created successfully.');
     }
+
     public function show($id)
     {
         $post = Post::with('comments')->findOrFail($id);
@@ -75,56 +75,35 @@ class PostController extends Controller
         $currentPhoto = $post['photo'];
         $user = User::where('id', $post->user_id)->value('username');
 
-        // dd($post->id);
         return view('posts.edit', compact('post', 'currentPhoto', 'user'));
     }
 
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'photo' => 'image|max:2048',
-            'description' => 'required',
-        ]);
+        $post = Post::find($id);
 
-        $post->description = $request->description;
+        $post->description = $request->input('description');
+        $post->user_id = $request->input('user_id');
 
         if ($request->hasFile('photo')) {
-            $imageName = time() . '.' . $request->photo->extension();
+            $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
             $request->photo->move(public_path('images'), $imageName);
             $post->photo = $imageName;
         }
 
-        // Si no se selecciona una nueva imagen, mantén la actual
-        else {
-            $post->photo = $post->photo;
-        }
-
         $post->save();
-
-        // Verificar si se ha dado like
-        // if ($request->has('like')) {
-        //     // Realizar las operaciones necesarias para agregar el like en la base de datos
-
-        //     // Por ejemplo, puedes hacer lo siguiente:
-        //     $user = Auth::user();
-        //     $post->likes()->attach($user->id);
-        // }
 
         return redirect()->route('posts')->with('success', 'Post updated successfully.');
     }
 
 
-    public function destroy(Post $post) //me borra siempre el ultimo...
-    {
-        if (Auth::user()->isAdmin() || Auth::id() == $post->user_id) {
-            $post->delete();
-            $post = Post::withTrashed()->get();
-            return redirect()->route('posts')->with('success', __('Post deleted successfully.'));
-        } else {
-            abort(403);
-        }
-    }
-    
+public function destroy(Post $post)
+{
+    $post->delete();
+
+    return redirect()->back()->with('success', 'Post deleted successfully.');
+}
+
 
 }
