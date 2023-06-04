@@ -5,21 +5,23 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="d-flex align-items-center">
-                    <div class="thumbnail me-4">
+                    <div class="thumbnail me-4 ">
                         <img class="rounded-5" src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
                             alt="Profile Image" width="150" height="150">
                     </div>
                     <div>
                         <h2 class="h3 mb-2">{{ $user->username }}</h2>
-                        <div class="d-flex">
-                            <span class="me-4 fs-5">{{ $numPosts }} Posts</span>
-                            <span class="me-4 fs-5">
-                                <a href="#" data-bs-toggle="modal"  class="text-decoration-none text-black" data-bs-target="#followersModal">
+                        <div class="d-flex flex-column flex-md-row">
+                            <span class="me-4 mb-2 mb-md-0 fs-5">{{ $numPosts }} Posts</span>
+                            <span class="me-4 mb-2 mb-md-0 fs-5">
+                                <a href="#" data-bs-toggle="modal" class="text-decoration-none text-black"
+                                    data-bs-target="#followersModal">
                                     {{ $numFollowers }} Followers
                                 </a>
                             </span>
-                            <span class="me-4 fs-5">
-                                <a href="#" data-bs-toggle="modal"  class="text-decoration-none text-black" data-bs-target="#followingModal">
+                            <span class="me-4 mb-2 mb-md-0 fs-5">
+                                <a href="#" data-bs-toggle="modal" class="text-decoration-none text-black"
+                                    data-bs-target="#followingModal">
                                     {{ $numFollowing }} Following
                                 </a>
                             </span>
@@ -46,67 +48,70 @@
                 <hr class="my-4">
                 <div class="row row-cols-1 row-cols-md-3 g-3">
                     @foreach ($posts as $post)
-                        <div class="col">
-                            <div class="card">
-                                <a href="{{ route('posts.show', $post->id) }}">
-                                    <div class="card h-100">
+                    <div class="col">
+                        <div class="card">
+                            <a href="{{ route('posts.show', $post->id) }}">
+                                <div class="card h-100">
+                                    <div style="overflow: hidden; height: 0; padding-bottom: 100%; position: relative;">
                                         <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top"
-                                            alt="{{ $post->description }}" width="200px" height="300px">
+                                            alt="{{ $post->description }}"
+                                            style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         </div>
-                    @endforeach
+                    </div>
+                @endforeach
+                
                 </div>
             </div>
         </div>
     </div>
-<!-- Followers Modal -->
-<div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    @foreach ($followers as $follower)
-                        <li>
-                            <a href="{{ route('users.show', $follower->username) }}">
-                                {{ $follower->username }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Following Modal -->
-<div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="followingModalLabel">Following</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    @foreach ($following as $followedUser)
-                        <li>
-                            <a href="{{ route('users.show', $followedUser->username) }}">
-                                {{ $followedUser->username }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+    <!-- Followers Modal -->
+    <div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        @foreach ($followers as $follower)
+                            <li>
+                                <a href="{{ route('users.show', $follower->username) }}">
+                                    {{ $follower->username }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Following Modal -->
+    <div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="followingModalLabel">Following</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        @foreach ($following as $followedUser)
+                            <li>
+                                <a href="{{ route('users.show', $followedUser->username) }}">
+                                    {{ $followedUser->username }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Unfollow Modal -->
     <div class="modal fade" id="unfollowModal" tabindex="-1" aria-labelledby="unfollowModalLabel" aria-hidden="true">
@@ -130,45 +135,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Obtén referencias a los elementos del DOM
+        const followButton = document.getElementById('followButton');
+        const followForm = document.getElementById('followForm');
+        const unfollowModal = new bootstrap.Modal(document.getElementById('unfollowModal'));
+        const followersModal = new bootstrap.Modal(document.getElementById('followersModal'));
+        const followingModal = new bootstrap.Modal(document.getElementById('followingModal'));
+
+        // Maneja el evento de clic del botón Follow/Unfollow
+        followButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (this.textContent === 'Follow') {
+                // El usuario quiere seguir
+                followForm.submit();
+                // Actualiza el texto y el color del botón
+                this.textContent = 'Following';
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-success');
+            } else {
+                // El usuario quiere dejar de seguir
+                unfollowModal.show();
+            }
+        });
+
+        // Maneja el evento de clic en el botón Followers
+        const followersButton = document.querySelector('.fs-5:nth-child(2) a');
+        followersButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            followersModal.show();
+        });
+
+        // Maneja el evento de clic en el botón Following
+        const followingButton = document.querySelector('.fs-5:nth-child(3) a');
+        followingButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            followingModal.show();
+        });
+    </script>
 @endsection
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Obtén referencias a los elementos del DOM
-    const followButton = document.getElementById('followButton');
-    const followForm = document.getElementById('followForm');
-    const unfollowModal = new bootstrap.Modal(document.getElementById('unfollowModal'));
-    const followersModal = new bootstrap.Modal(document.getElementById('followersModal'));
-    const followingModal = new bootstrap.Modal(document.getElementById('followingModal'));
-
-    // Maneja el evento de clic del botón Follow/Unfollow
-    followButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (this.textContent === 'Follow') {
-            // El usuario quiere seguir
-            followForm.submit();
-            // Actualiza el texto y el color del botón
-            this.textContent = 'Following';
-            this.classList.remove('btn-primary');
-            this.classList.add('btn-success');
-        } else {
-            // El usuario quiere dejar de seguir
-            unfollowModal.show();
-        }
-    });
-
-    // Maneja el evento de clic en el botón Followers
-    const followersButton = document.querySelector('.fs-5:nth-child(2) a');
-    followersButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        followersModal.show();
-    });
-
-    // Maneja el evento de clic en el botón Following
-    const followingButton = document.querySelector('.fs-5:nth-child(3) a');
-    followingButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        followingModal.show();
-    });
-</script>

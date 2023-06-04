@@ -54,8 +54,8 @@ class AdoptionController extends Controller
             $email = $request->input('email');
             Mail::to($email)->send(new AdoptionConfirmation($pet));
 
-            return redirect()->route('login')
-                ->with('success', 'Adoption request submitted. Check your mail');
+            return redirect()->route('adopt')
+                ->with('success', 'Adoption request submitted. Check your mail!');
         }
     }
 

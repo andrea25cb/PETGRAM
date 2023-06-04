@@ -38,7 +38,7 @@
       <h3><strong>Don't have a pet?</strong> Give one a home! You can adopt the pet you want, then you can create it an account to show it off ;)</h3>
       <a class="btn btn-warning mt-2 mb-4" href="{{ route('adopt') }}">ADOPT</a>
       <a class="btn btn-success mt-2 mb-4" href="{{ route('register') }}">CREATE ACCOUNT</a>
-    </div>
+      <br><br>  <br><br> </div>
     
 {{--   
   <div class="row mt-5">

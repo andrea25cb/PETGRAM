@@ -1,41 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="text-center mb-5">Posts <a href="{{ route('createPost') }}" class="btn btn-warning"><i class="material-icons">add</i></a></h1>
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-        @foreach ($posts as $post)
+    <div class="container">
+        <h1 class="text-center mb-5">Posts <a href="{{ route('createPost') }}" class="btn btn-warning"><i
+                    class="material-icons">add</i></a></h1>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            @foreach ($posts as $post)
             @if (!$post->trashed())
                 <div class="col">
                     <div class="card">
                         <a href="{{ route('posts.show', $post->id) }}">
                             <div class="card h-100">
-                                <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top" alt="{{ $post->description }}" width="200px" height="300px">
+                                <div style="overflow: hidden; height: 0; padding-bottom: 100%; position: relative;">
+                                    <img src="{{ asset('images/' . $post->photo) }}" class="card-img-top"
+                                        alt="{{ $post->description }}"
+                                        style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                                </div>
                             </div>
                         </a>
                         <div class="card-body">
-                            <p class="card-text"><b><a class="text-black" href="{{ route('user.profile', $users[$post->id]) }}">{{ $users[$post->id] }}</a></b></p>
+                            <p class="card-text"><b><a class="text-black"
+                                        href="{{ route('user.profile', $users[$post->id]) }}">{{ $users[$post->id] }}</a></b></p>
                             <div class="d-flex align-items-center justify-content-between">
-                                <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="btn btn-primary"><i class="material-icons">comment</i></a>
-                                @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->id == $post->user_id))
-                                    <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning"><i class="material-icons">edit</i></a>
-                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-post-id="{{ $post->id }}"><i class="material-icons">delete</i></button>
+                                <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="btn btn-primary"><i
+                                        class="material-icons">comment</i></a>
+                                @if (auth()->check() &&
+                                        (auth()->user()->isAdmin() ||
+                                            auth()->user()->id == $post->user_id))
+                                    <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning"><i
+                                            class="material-icons">edit</i></a>
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                                        data-bs-target="#deletePostModal" data-post-id="{{ $post->id }}"><i
+                                            class="material-icons">delete</i></button>
                                 @endif
                                 <form action="{{ route('posts.like', $post) }}" method="POST" class="like-form">
                                     @csrf
-                                    {{-- <button type="submit" class="btn btn-success like-button @if ($post->likes()->where('user_id', auth()->id())->exists()) liked @endif">
-                                        @if ($post->likes()->where('user_id', auth()->id())->exists())
-                                            <3
-                                        @else
-                                            <3
-                                        @endif
-                                    </button> --}}
-                                    <button type="submit" class="btn btn-success like-button @if ($post->likes()->where('user_id', auth()->id())->exists()) liked @endif">
+                                    <button type="submit"
+                                        class="btn btn-success like-button @if ($post->likes()->where('user_id', auth()->id())->exists()) liked @endif">
                                         <i class="material-icons">favorite</i>
                                     </button>
                                 </form>
@@ -45,7 +51,8 @@
                     </div>
                 </div>
             @endif
-            @endforeach
+        @endforeach
+        
         </div>
         <div class="d-flex justify-content-center mt-4">
             {!! $posts->links() !!}
@@ -84,10 +91,10 @@
 
                 if (isLiked) {
                     $button.removeClass('liked');
-                    $button.text('<3');
+                    // $button.text('<3');
                 } else {
                     $button.addClass('liked');
-                    $button.text('<3');
+                    // $button.text('<3');
                 }
 
                 // Submit the form via AJAX

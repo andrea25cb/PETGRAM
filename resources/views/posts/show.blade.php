@@ -54,20 +54,17 @@
                         <label for="content" class="form-label">Add a comment:</label>
                         <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">COMMENT</button>
-                </form>
-
-                @if (optional(Auth::user())->isAdmin() || (Auth::user() && Auth::user()->id == $post->user_id))
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        @if (isset($post->id))
-                            <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning">Edit</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="submit" class="btn btn-primary">COMMENT</button>
+                        @if (optional(Auth::user())->isAdmin() || (Auth::user() && Auth::user()->id == $post->user_id))
+                            @if (isset($post->id))
+                                <a href="{{ route('editPost', ['id' => $post->id]) }}" class="btn btn-warning">EDIT</a>
+                            @endif
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-post-id="{{ $post->id }}">DELETE</button>
                         @endif
-
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#deletePostModal">Delete</button>
                     </div>
-                @endif
+                </form>
+                
             </div>
         </div>
     </div>
@@ -84,17 +81,30 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    @if (isset($post) && $post->id)
-                        <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" name="id" value="{{ $post->id }}">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    @endif
+                    <form id="deletePostForm" action="" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+
+    </div>
     <br><br>
+    <script>
+        $(document).ready(function() {
+
+            $('#deletePostModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var postId = button.data('post-id');
+                var form = $('#deletePostForm');
+                var url = '/posts/' + postId;
+
+                form.attr('action', url);
+            });
+        });
+    </script>
 @endsection

@@ -83,7 +83,8 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
-                            </div>
+                                <a class="btn btn-warning text-danger" href="{{ route('login-google') }}">Register with Google</a> 
+                            </div> 
                         </div>
                     </form>
                 </div>

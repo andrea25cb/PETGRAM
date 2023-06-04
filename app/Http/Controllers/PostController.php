@@ -22,7 +22,7 @@ class PostController extends Controller
                 ->whereIn('user_id', $userIds)
                 ->whereNull('deleted_at')
                 ->orderByDesc('created_at') // Ordena las publicaciones más recientes primero
-                ->paginate(5);
+                ->paginate(8);
         }
     
         $users = [];
